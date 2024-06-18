@@ -1,4 +1,7 @@
 
+using BuildingBlocks.Behaviors;
+using FluentValidation;
+
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 
@@ -8,12 +11,14 @@ builder.Services.AddCarter(null, config =>
     config.WithModules(modules);
 });
 
+var assembly = typeof(Program).Assembly;
 builder.Services.AddMediatR(config =>
 {
-    config.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    config.RegisterServicesFromAssembly(assembly);
 });
 
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddMarten(config =>
 {
