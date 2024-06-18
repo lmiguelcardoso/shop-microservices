@@ -10,6 +10,7 @@ builder.Services.AddCarter(null, config =>
 var assembly = typeof(Program).Assembly;
 builder.Services.AddMediatR(config =>
 {
+    config.AddOpenBehavior(typeof(LoggingBehavior<,>));
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
     config.RegisterServicesFromAssembly(assembly);
 });
@@ -20,6 +21,8 @@ builder.Services.AddMarten(config =>
 {
     config.Connection(builder.Configuration.GetConnectionString("Database")!);
 }).UseLightweightSessions();
+
+if(builder.Environment.IsDevelopment()) builder.Services.InitializeMartenWith<CatalogInitialData>();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
