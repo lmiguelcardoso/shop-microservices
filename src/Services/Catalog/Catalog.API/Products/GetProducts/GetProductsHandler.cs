@@ -1,14 +1,12 @@
-﻿using Catalog.API.Products.CreateProduct;
-
-namespace Catalog.API.Products.GetProducts
+﻿namespace Catalog.API.Products.GetProducts
 {
-    public record GetProductsCommand() : ICommand<GetProductsResult>;
+    public record GetProductsQuery(int? PageNumber = 1, int? PageSize = 10) : ICommand<GetProductsResult>;
     public record GetProductsResult(IEnumerable<Product> Products);
-    public class GetProductsQueryHandler(IDocumentSession session) : ICommandHandler<GetProductsCommand, GetProductsResult>
+    public class GetProductsQueryHandler(IDocumentSession session) : ICommandHandler<GetProductsQuery, GetProductsResult>
     {
-        public async Task<GetProductsResult> Handle(GetProductsCommand query, CancellationToken cancellationToken)
+        public async Task<GetProductsResult> Handle(GetProductsQuery query, CancellationToken cancellationToken)
         {
-            var products = await session.Query<Product>().ToListAsync(cancellationToken);
+            var products = await session.Query<Product>().ToPagedListAsync(query.PageNumber ?? 1, query.PageSize ?? 10, cancellationToken);
 
             return new GetProductsResult(products);
         }
