@@ -1,9 +1,10 @@
 using BuildingBlocks.Exceptions.Handler;
+using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
-
+//Application Service
 builder.Services.AddCarter(null, config =>
 {
     var modules = typeof(Program).Assembly.GetTypes().Where(t => t.IsAssignableTo(typeof(ICarterModule))).ToArray();
@@ -18,8 +19,7 @@ builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssembly(assembly);
 });
 
-builder.Services.AddValidatorsFromAssembly(assembly);
-
+//Data Services
 builder.Services.AddMarten(config =>
 {
     config.Connection(builder.Configuration.GetConnectionString("Database")!);
@@ -32,7 +32,16 @@ builder.Services.Decorate<IBasketRepository, CacheBasketRepository>();
 builder.Services.AddStackExchangeRedisCache(options => {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
     options.InstanceName = "Basket";
-}); 
+});
+
+//Grpc Services
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options => 
+{
+    options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
+});
+
+//Cross-Cutting Services
+builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
