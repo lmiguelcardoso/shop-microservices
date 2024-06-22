@@ -25,7 +25,7 @@
             State = state;
             ZipCode = zipCode;
         }
-        private static Address Of(string firstName, string lastName, string? emailAddress, string addressLine, string country, string state, string zipCode)
+        public static Address Of(string firstName, string lastName, string? emailAddress, string addressLine, string country, string state, string zipCode)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(emailAddress);
             ArgumentException.ThrowIfNullOrWhiteSpace(addressLine);

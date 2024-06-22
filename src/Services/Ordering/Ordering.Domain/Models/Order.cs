@@ -17,7 +17,7 @@
             private set { }
         }
 
-        public static Order Create(OrderId orderID, CustomerId customerId, OrderName orderName, Address shippingAddress, Address billingAddress, Payment payment, OrderStatus status, decimal totalPrice)
+        public static Order Create(OrderId orderID, CustomerId customerId, OrderName orderName, Address shippingAddress, Address billingAddress, Payment payment)
         {
             var order = new Order
             {
