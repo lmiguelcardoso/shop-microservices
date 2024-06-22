@@ -12,6 +12,12 @@ namespace Ordering.Infrastructure.Data.Interceptors
             return base.SavingChanges(eventData, result);
         }
 
+        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+        {
+            await DispatchDomainEvents(eventData.Context);
+            return await base.SavingChangesAsync(eventData, result, cancellationToken);
+        }
+
         public async Task DispatchDomainEvents(DbContext? context)
         {
             if (context is null) return;
@@ -31,10 +37,5 @@ namespace Ordering.Infrastructure.Data.Interceptors
             }
         }
 
-        public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
-        {
-            DispatchDomainEvents(eventData.Context).GetAwaiter().GetResult();
-            return base.SavingChangesAsync(eventData, result, cancellationToken);
-        }
     }
 }
