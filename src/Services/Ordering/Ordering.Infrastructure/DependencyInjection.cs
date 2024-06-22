@@ -19,7 +19,7 @@ namespace Ordering.Infrastructure
                 options.UseSqlServer(connectionString);
             });
 
-            //services.AddScoped<IapplicationDBContext, ApplicationDbContext>();
+            services.AddScoped<IApplicationDBContext, ApplicationDbContext>();
 
             return services;
         }
