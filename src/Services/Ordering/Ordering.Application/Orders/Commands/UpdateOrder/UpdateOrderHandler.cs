@@ -1,4 +1,4 @@
-﻿using Ordering.Application.Extensions;
+﻿using Ordering.Application.Exceptions;
 
 namespace Ordering.Application.Orders.Commands.UpdateOrder
 {

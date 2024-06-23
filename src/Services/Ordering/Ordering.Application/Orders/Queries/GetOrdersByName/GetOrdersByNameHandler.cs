@@ -7,14 +7,14 @@ namespace Ordering.Application.Orders.Queries.GetOrdersByName
         public async Task<GetOrdersByNameResult> Handle(GetOrdersByNameQuery query, CancellationToken cancellationToken)
         {
             var orders = await dbContext.Orders
-                        .Include(order => order.OrderItems)
-                        .AsNoTracking()
-                        .Where(order => order.OrderName.Value.Contains(query.Name))
-                        .OrderBy(order => order.OrderName)
-                        .ToListAsync(cancellationToken);
+            .Include(o => o.OrderItems)
+            .Where(o => o.OrderName.Value.Contains(query.Name))
+            .OrderBy(order => order.OrderName.Value)
+            .ToListAsync(cancellationToken);
 
-            var orderDtos = orders.ToOrderDtoList();
-            return new GetOrdersByNameResult(orderDtos);
+            var ordersDto = orders.ToOrderDtoList();
+
+            return new GetOrdersByNameResult(ordersDto);
         }
     }
 }

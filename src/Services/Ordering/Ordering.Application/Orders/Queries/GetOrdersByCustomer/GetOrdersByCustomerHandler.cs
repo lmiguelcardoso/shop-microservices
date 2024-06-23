@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ordering.Application.Orders.Queries.GetOrdersByCustomer
 {
-    public class GetOrderByCustomerHandler(IApplicationDbContext dbContext) : IQueryHandler<GetOrderByCustomerQuery, GetOrderByCustomerResult>
+    public class GetOrdersByCustomerHandler(IApplicationDbContext dbContext) : IQueryHandler<GetOrdersByCustomerQuery, GetOrdersByCustomerResult>
     {
-        public async Task<GetOrderByCustomerResult> Handle(GetOrderByCustomerQuery query, CancellationToken cancellationToken)
+        public async Task<GetOrdersByCustomerResult> Handle(GetOrdersByCustomerQuery query, CancellationToken cancellationToken)
         {
             var orders = await dbContext.Orders
                         .Include(o => o.OrderItems)
@@ -14,7 +14,7 @@ namespace Ordering.Application.Orders.Queries.GetOrdersByCustomer
                         .OrderBy(order => order.OrderName.Value)
                         .ToListAsync(cancellationToken);
 
-            return new GetOrderByCustomerResult(orders.ToOrderDtoList());
+            return new GetOrdersByCustomerResult(orders.ToOrderDtoList());
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Ordering.Application.Extensions;
+﻿using Ordering.Application.Exceptions;
 
 namespace Ordering.Application.Orders.Commands.DeleteOrder
 {
@@ -6,7 +6,7 @@ namespace Ordering.Application.Orders.Commands.DeleteOrder
     {
         public async Task<DeleteOrderResult> Handle(DeleteOrderCommand command, CancellationToken cancellationToken)
         {
-            var orderId = command.OrderId;
+            var orderId = OrderId.Of(command.OrderId);
 
             var order = await dbContext.Orders.FindAsync(orderId, cancellationToken);
 
