@@ -1,6 +1,6 @@
 ﻿using BuildingBlocks.Exceptions;
 
-namespace Ordering.Application.Extensions
+namespace Ordering.Application.Exceptions
 {
     internal class OrderNotFoundException : NotFoundException
     {
