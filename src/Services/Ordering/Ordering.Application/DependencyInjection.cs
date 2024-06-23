@@ -2,6 +2,7 @@
 using BuildingBlocks.Messaging.MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.FeatureManagement;
 using System.Reflection;
 
 
@@ -19,6 +20,8 @@ namespace Ordering.Application
             });
 
             services.AddMessageBroker(builder, Assembly.GetExecutingAssembly());
+
+            services.AddFeatureManagement();
 
             return services;
         }
